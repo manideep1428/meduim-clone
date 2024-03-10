@@ -3,6 +3,7 @@ import { withAccelerate } from '@prisma/extension-accelerate'
 import { Hono } from 'hono';
 import { sign, verify } from 'hono/jwt'
 import { signinInput, signupInput } from "@manideep1428/meduim-common"
+import { HTTPException } from 'hono/http-exception'
 
 
 export const userRouter = new Hono<{
@@ -33,8 +34,7 @@ userRouter.post('/signup', async (c) => {
 		});
     console.log(user)
 	const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
-    c.text(jwt);
-    return c.text("Signup Sucessfully")       
+    return c.json({jwt:jwt , message:"SucessFully Signed Up"})    
 	} catch(e) {
 		c.status(403);
 		return c.json({ error: "error while signing up" });
@@ -57,10 +57,12 @@ userRouter.post('/signin', async (c) => {
 			email: body.email
 		}
 	})
-
+	console.log(user?.password , body.password)
 	if (!user) {
-		c.status(403);
-		return c.json({ error: "user not found" });
+		c.json({error :"User Not Found"})
+	}
+	else if(!user.password===body.password){
+
 	}
 	const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
 	return c.text(jwt);
