@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { Hono } from 'hono';
 import { decode, sign, verify } from 'hono/jwt'
+import { string } from 'zod';
 
 
 export const blogRouter = new Hono<{
@@ -69,39 +70,58 @@ blogRouter.put('/', async (c) => {
   } 
  })
 
-blogRouter.get('/:id', async(c) => {
+
+  
+blogRouter.get('/bulk',async (c) => {
     const prisma = new PrismaClient({
+		datasourceUrl: c.env?.DATABASE_URL	,
+	}).$extends(withAccelerate());
+   try {
+    const blog = await prisma.post.findMany({
+       select:{
+         content:true,
+         title:true,
+         id:true,
+         author:{
+            select:{
+               name:true
+            }
+         }
+       }
+    })
+    return c.json({blog})
+} catch (error:any) {
+return c.text(error) 
+   }
+})
+
+
+blogRouter.get('/:id', async(c) => {
+   const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL	,
 	}).$extends(withAccelerate());
    const id = c.req.param("id")
    try {
     const blog = await prisma.post.findUnique({
         where:{
-           id:id
+           id:Number(id)
         },
+        select:{
+         content:true,
+         title:true,
+         id:true,
+         author:{
+            select:{
+               name:true
+            }
+         }
+       }
        })
     return c.json({post:blog})   
-  } catch (error) {
-    return c.text("Error Occured To Fetching all Blogs,Try Again")
+  } catch (error:any) {
+    return c.text("Error Occured To Fetching all Blogs,",error)
   }    
 })
-  
-blogRouter.get('/bulk',async (c) => {
-    const prisma = new PrismaClient({
-    
-		datasourceUrl: c.env?.DATABASE_URL	,
-	}).$extends(withAccelerate());
-   try {
-    const blog = await prisma.post.findMany({
-        where:{
-            
-        }
-    })
-   } catch (error) {
-return c.text("Error Occured in Getting Blog,Try Again") 
-   }
-})
-  
 
 
 // blogRouter.use("/*",async (c,next)=>{

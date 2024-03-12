@@ -20,8 +20,9 @@ export const Auth = ({type}:{type:"signup" | "signin"})=>{
       try {
         const response =  await axios.post(`${BACKEND_URL}/api/v1/user/${type==="signin"?"signin":"signup"}` ,postInput)
         const {jwt , message} = response.data
-        localStorage.setItem("token",jwt)
-        // navigate("/blog")
+        console.log(response.data)
+        localStorage.setItem("token", jwt )
+        navigate("/blog")
         console.log(response.data)
         toast.success(message)
       } catch(error) {

@@ -1,12 +1,39 @@
-import {BlogCard }from "../components/BlogCard";
+import AppBar from "../components/AppBar";
+import { BlogCard } from "../components/BlogCard";
+import { useBlogs } from "../hooks";
 
 const Blogs = () => {
+  const {loading, blogs} = useBlogs();
+
+  if (!loading) {
+    return (
+      <div>
+        <AppBar />
+        <div>
+          Loading...
+        </div>
+      </div>
+    );
+  }
   return (
-     <div>
-        <BlogCard title="The AI Dilemma: When Large Language Model Training Reaches A Dead End" content="AI is set out to replace hundreds of thousands of jobs not just in software engineering, but also in various other fields such as jornalism, creative work, customer interaction and many more. It’s the same mantra we heard of
-         every innovation in technology that came before: “The computer will replace humans entirely”." username="Gwen" publishedDate="20-04-2003"/>
-     </div>
-  )
-}
+    <div>
+      <AppBar />
+      <div>
+        {blogs.length === 0 ? (
+         <div>Hi there PLease Wait</div>
+        ) : (
+          blogs.map(blog => (
+            <BlogCard
+              key={blog.id} 
+              title={blog.title}
+              content={blog.content}
+              username={blog.author.name  || ""}
+            />
+          ))
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default Blogs;
