@@ -2,6 +2,7 @@ import axios from "axios";
 import { BACKEND_URL } from '../../config';
 import { useEffect, useState } from "react";
 
+
 interface Blog {
   id:string
   username: string;
@@ -11,6 +12,33 @@ interface Blog {
     name:string | null
   }
 }
+
+export const useBlog =({id}:{id:string})=>{
+  const [loading, setLoading] = useState(false);
+  const [blog, setBlog] = useState<Blog[]>([]);
+
+  useEffect(() => {
+    axios.get(`${BACKEND_URL}/api/v1/blog/${id}`, {
+      headers: {
+        Authorization: localStorage.getItem("token")
+      }
+    }).then((response) => {
+      setLoading(true);
+      setBlog(response.data.post);
+    }).catch((error) => {
+      console.error("Error fetching blogs:", error);
+    });
+  }, [id]);
+
+  return(
+    {loading,
+    blog}
+  )    
+};
+  
+
+//BUlk Posts Hook
+
 export const useBlogs = () => {
   const [loading, setLoading] = useState(false);
   const [blogs, setBlogs] = useState<Blog[]>([]);
