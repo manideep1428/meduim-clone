@@ -1,9 +1,14 @@
 import AppBar from "../components/AppBar";
 import { BlogCard } from "../components/BlogCard";
 import { useBlogs } from "../hooks";
+import { useNavigate } from "react-router-dom";
 
 const Blogs = () => {
   const {loading, blogs} = useBlogs();
+  const navigate = useNavigate()
+  const handleBlog=(id)=>{
+     navigate(`/blog/${id}`)
+  }
 
   if (!loading) {
     return (
@@ -23,12 +28,14 @@ const Blogs = () => {
          <div>Hi there PLease Wait</div>
         ) : (
           blogs.map(blog => (
-            <BlogCard
+           <div onClick={()=>handleBlog(blog.id)}>
+              <BlogCard
               key={blog.id} 
               title={blog.title}
               content={blog.content}
               username={blog.author.name  || ""}
             />
+           </div>
           ))
         )}
       </div>

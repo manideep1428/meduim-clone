@@ -22,7 +22,7 @@ export const Auth = ({type}:{type:"signup" | "signin"})=>{
         const {jwt , message} = response.data
         console.log(response.data)
         localStorage.setItem("token", jwt )
-        navigate("/blog")
+        navigate("/blogs")
         console.log(response.data)
         toast.success(message)
       } catch(error) {
