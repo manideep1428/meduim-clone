@@ -37,11 +37,12 @@ blogRouter.post('/', async (c) => {
 	}).$extends(withAccelerate());
    const userId = c.get("userId")
    const body =await c.req.json()
+    console.log(body)
    const blog =await prisma.post.create({
      data:{
         title:body.title,
         content:body.content,
-        authorId:userId //Author ID will extracted form middelware 
+        authorId:userId 
      }
    })
    return c.json({sucess :"Sucessfully blog added" ,id:blog.id})

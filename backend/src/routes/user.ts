@@ -1,9 +1,8 @@
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { Hono } from 'hono';
-import { sign, verify } from 'hono/jwt'
+import { sign} from 'hono/jwt'
 import { signinInput, signupInput } from "@manideep1428/meduim-common"
-import { HTTPException } from 'hono/http-exception'
 
 
 export const userRouter = new Hono<{
@@ -33,7 +32,7 @@ userRouter.post('/signup', async (c) => {
 			}
 		});
     console.log(user)
-	const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
+	const jwt = await sign({ id: user.id , name:user.name}, c.env.JWT_SECRET);
     return c.json({jwt:jwt , message:"SucessFully Signed Up"})    
 	} catch(e) {
 		c.status(403);
@@ -64,7 +63,7 @@ userRouter.post('/signin', async (c) => {
 	else if(!user.password===body.password){
 
 	}
-	const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
+	const jwt = await sign({ id: user?.id , name:user?.name}, c.env.JWT_SECRET);
     return c.json({jwt:jwt , message:"SucessFully Signed In"})    
     
 })

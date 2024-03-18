@@ -9,7 +9,7 @@ interface Blog {
   };
 }
 
-const FullBlogs = ({ blog }: { blog: Blog }) => {
+const FullBlogs = ({ blog} : {blog: Blog }) => {
   return (
     <div className="text-center m-4 md:grid md:grid-cols-12 md:gap-6 ">
       <div className="md:col-span-12">

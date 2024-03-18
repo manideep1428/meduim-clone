@@ -19,14 +19,14 @@ export const Auth = ({type}:{type:"signup" | "signin"})=>{
     const handleApi = async()=>{
       try {
         const response =  await axios.post(`${BACKEND_URL}/api/v1/user/${type==="signin"?"signin":"signup"}` ,postInput)
-        const {jwt , message} = response.data
-        console.log(response.data)
+        const {jwt , message,user} = response.data
         localStorage.setItem("token", jwt )
-        navigate("/blogs")
-        console.log(response.data)
         toast.success(message)
+        setTimeout(()=>
+        navigate("/blogs")
+        ,2000)
       } catch(error) {
-          console.log(error)
+          toast.error(error)
       }
     }
 

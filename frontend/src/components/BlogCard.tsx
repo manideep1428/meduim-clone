@@ -6,7 +6,6 @@ interface BlogCardProps {
     title: string;
     content: string;
     publishedDate?: string;
-
 }
 
 export const BlogCard: React.FC<BlogCardProps> = ({

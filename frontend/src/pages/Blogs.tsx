@@ -28,9 +28,8 @@ const Blogs = () => {
          <div>Hi there PLease Wait</div>
         ) : (
           blogs.map(blog => (
-           <div onClick={()=>handleBlog(blog.id)}>
+           <div onClick={()=>handleBlog(blog.id)} key={blog.id}>
               <BlogCard
-              key={blog.id} 
               title={blog.title}
               content={blog.content}
               username={blog.author.name  || ""}

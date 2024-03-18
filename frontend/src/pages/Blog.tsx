@@ -3,6 +3,15 @@ import FullBlogs from "../components/FullBlogs";
 import { useBlog } from "../hooks"
 import { useParams } from "react-router-dom";
 
+interface Blog {
+  id: string;
+  title: string;
+  content: string;
+  author: {
+    name: string | null;
+  };
+}
+
 export const Blog = () => {
   const {id} = useParams();
   const {loading , blog} = useBlog({
@@ -10,8 +19,6 @@ export const Blog = () => {
   });
 
   if(!loading){
-    console.log(id)
-    {console.log(blog)}
     return(
       <div>
        <AppBar/>
@@ -20,6 +27,7 @@ export const Blog = () => {
     )
   }
   //If not Loading
+
   return (
     <div>
       <AppBar/>
